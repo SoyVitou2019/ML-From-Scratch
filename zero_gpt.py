@@ -29,12 +29,17 @@ for i in range(5000):
     yh = xs @ ws
     e = yh - ys
     e = np.sum(np.abs(e))
-    if e < 0.1:
+    if e < 0.05:
         print("found solution")
         print(ws)
     else:
-        ws = weight(ins, outs)
-
+        mutation = weight(ins, outs) * 0.1
+        cw = ws + mutation
+        yh = xs @ cw
+        ce = yh - ys
+        ce = np.sum(np.abs(ce))
+        if ce < e:
+            ws = cw
     ers.append(e)
 
 
