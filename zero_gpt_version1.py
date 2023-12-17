@@ -1,5 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
+import matplotlib.pylab as plt
 
 xs = np.asarray([[0, 1, 0, 1, 0],
                  [0, 0, 2, 1, 0],
@@ -15,11 +15,6 @@ ys = np.asarray([[0],
 
 ins = 5
 outs = 1
-nodes = 15
-
-# xs = np.hstack((xs, np.ones([xs.shape[0], 1])))
-
-print(xs)
 
 
 def weight(input_x, output):
@@ -27,33 +22,29 @@ def weight(input_x, output):
     return wss
 
 
-w1 = weight(ins, nodes)
-w2 = weight(nodes, outs)
+ws = weight(ins, outs)
 
 ers = []
-for i in range(5000):
-    y1 = xs @ w1
-    y1 = np.sin(y1)
-    yh = y1 @ w2
+for i in range(14000):
+    yh = xs @ ws
     e = yh - ys
     e = np.sum(np.abs(e))
     if e < 0.05:
         print("found solution")
+        print(ws)
         break
     else:
-        cw1 = w1 + weight(ins, nodes) * 0.01
-        cw2 = w2 + weight(nodes, outs) * 0.01
-        yc1 = xs @ cw1
-        yc1 = np.sin(yc1)
-        yh = yc1 @ cw2
+        mutation = weight(ins, outs) * 0.1
+        cw = ws + mutation
+        yh = xs @ cw
         ce = yh - ys
         ce = np.sum(np.abs(ce))
         if ce < e:
-            w1 = cw1
-            w2 = cw2
+            ws = cw
     ers.append(e)
 
+
 print(min(ers))
-plt.figure(1)
-plt.plot(ers)
+# plt.figure(1)
+# plt.plot(ers)
 # plt.show()
